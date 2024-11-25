@@ -120,7 +120,7 @@ body {
   }
 
   .story-img-content {
-    @apply absolute w-full md:h-dvh h-[50dvh] opacity-100 left-10 top-16 md:left-0 md:top-10 lg:left-[-300px] lg:top-[-100px];
+    @apply absolute w-full  opacity-100 left-10 top-16 md:left-0 md:top-10 lg:left-[-300px] lg:top-[-100px];
     transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0) scale(1);
   }
 

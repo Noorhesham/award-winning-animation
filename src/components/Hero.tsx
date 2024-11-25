@@ -13,10 +13,10 @@ const Hero = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
   const [isMouseMoving, setIsMouseMoving] = useState(false);
-  const inactivityTimeoutRef = useRef<any | null>(null);
+  const inactivityTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const backgroundVideoRef = useRef(null);
   const cursorRef = useRef(null);
-
+  const heroRef = useRef<HTMLDivElement | null>(null);
   function handleMiniVidoClick() {
     setHasClicked(true);
     setCurrentIndex(upcomingVideoIndex);
@@ -106,15 +106,15 @@ const Hero = () => {
         ease: "power2.out",
       });
     };
-
-    document.querySelector(".hero")?.addEventListener("mousemove", handleMouseMove);
+    if (!heroRef.current) return;
+    heroRef.current.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
   return (
-    <div className=" relative  h-dvh   hero w-screen overflow-x-hidden">
+    <div ref={heroRef} className=" relative  h-dvh   hero w-screen overflow-x-hidden">
       {isLoading && (
         <div className="flex-center  absolute z-[100] h-dvh w-screen overflow-hidden  bg-violet-50 ">
           <div className="three-body">

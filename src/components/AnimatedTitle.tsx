@@ -1,18 +1,24 @@
 import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const AnimatedTitle = ({
   title,
   className,
-  noAnimation,
+  noAnimation = false,
+  sectionId,
 }: {
   title: string;
-  className: string;
+  className?: string;
   noAnimation?: boolean;
+  sectionId?: string;
 }) => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (noAnimation) return;
+    if (noAnimation || !containerRef.current) return;
 
     const ctx = gsap.context(() => {
       const titleAnimation = gsap.timeline({
@@ -24,7 +30,8 @@ const AnimatedTitle = ({
           toggleActions: "play none none reverse",
         },
       });
-      titleAnimation.to(".animated-word", {
+
+      titleAnimation.to(Array.from(containerRef.current?.querySelectorAll("span") || []), {
         opacity: 1,
         transform: `translate3d(0,0,0) rotateY(0deg) rotateX(0deg)`,
         ease: "power2.inOut",
@@ -33,14 +40,12 @@ const AnimatedTitle = ({
     });
     return () => ctx.revert();
   }, [noAnimation]);
-  // inserting the <b></b> as dangerous html to style special characters
-  // deal with each line as a flex
 
   return (
-    <div ref={containerRef}>
-      <h2 className={` animated-title     ${className}   `}>
+    <div id={sectionId || ""} ref={containerRef}>
+      <h2 className={`animated-title ${className}`}>
         {title.split("<br/>").map((line, index) => (
-          <div key={index} className="flex-center max-w-full flex-wrap gap-2 px-10 md:gap-3 ">
+          <div key={index} className="flex-center max-w-full flex-wrap gap-2 px-10 md:gap-3">
             {line.split(" ").map((word, i) => (
               <span className="animated-word" dangerouslySetInnerHTML={{ __html: word }} key={i} />
             ))}

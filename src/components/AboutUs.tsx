@@ -5,8 +5,9 @@ import AnimatedTitle from "./AnimatedTitle";
 
 const AboutUs = () => {
   useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const context = gsap.context(() => {
-      gsap.set(".mask-clip-path2", { clipPath: " polygon(14% 0, 82% 16%, 80% 92%, 6% 89%)" });
+      if (!isMobile) gsap.set(".mask-clip-path2", { clipPath: " polygon(14% 0, 82% 16%, 80% 92%, 6% 89%)" });
       gsap
         .timeline({
           scrollTrigger: {
@@ -18,9 +19,10 @@ const AboutUs = () => {
             pin: true,
             pinSpacing: true,
             onLeaveBack: () => {
-              gsap.to(".mask-clip-path2", { clipPath: " polygon(14% 0, 82% 16%, 80% 92%, 6% 89%)" });
+              if (!isMobile) gsap.to(".mask-clip-path2", { clipPath: " polygon(14% 0, 82% 16%, 80% 92%, 6% 89%)" });
             },
             onUpdate: (self) => {
+              if (isMobile) return;
               const progress = self.progress;
               console.log(progress);
               const clipPathValue = `
